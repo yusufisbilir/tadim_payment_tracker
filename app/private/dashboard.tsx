@@ -31,7 +31,7 @@ export default function Dashboard() {
             </div>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 rounded bg-accent text-white font-semibold hover:bg-black transition"
+              className="px-4 py-2 rounded bg-accent font-semibold"
             >
               Logout
             </button>

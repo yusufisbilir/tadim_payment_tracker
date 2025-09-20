@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/config";
+import Routes from "@/constants/Routes";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -10,12 +11,12 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
+      const { data } = await supabase.auth.getUser();
+      if (data.user) {
         setIsLoggedIn(true);
       } else {
         setIsLoggedIn(false);
-        router.replace("/public/login");
+        router.replace(Routes.LOGIN);
       }
       setLoading(false);
     };
