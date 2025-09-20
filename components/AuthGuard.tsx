@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/config";
 import Routes from "@/constants/Routes";
+import { createClient } from "@/utils/supabase/client";
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
+  const supabase = createClient();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
