@@ -1,10 +1,6 @@
 "use client";
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || "";
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { supabase } from "@/utils/supabase/config";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -13,7 +9,9 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError("");
-    const { error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+    });
     setLoading(false);
     if (error) {
       setError(error.message);
@@ -22,14 +20,14 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm bg-white border border-input-border rounded-xl shadow-lg p-8 flex flex-col gap-6 items-center">
+      <div className="w-full max-w-sm bg-white border border-input-border border-orange-300 rounded-xl shadow-lg p-8 flex flex-col gap-6 items-center">
         <span className="text-3xl font-extrabold text-accent tracking-wide mb-2">TADIM</span>
         {error && <p className="text-accent text-sm text-center">{error}</p>}
         <button
           type="button"
           onClick={handleGoogleLogin}
           disabled={loading}
-          className="w-full py-2 rounded bg-black text-white font-semibold hover:bg-accent transition disabled:opacity-50"
+          className="w-full py-2 rounded bg-orange-500 text-white font-semibold hover:bg-accent transition disabled:opacity-50 cursor-pointer"
         >
           {loading ? "Redirecting..." : "Sign in with Google"}
         </button>
