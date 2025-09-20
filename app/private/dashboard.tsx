@@ -1,16 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { supabase } from "@/utils/supabase/config";
 import { Table } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Select } from "@/components/ui/select";
 import { User } from "@supabase/supabase-js";
 import { SignOutIcon } from "@phosphor-icons/react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function Dashboard() {
+  const supabase = createClient()
   const [user, setUser] = useState<User | null>(null);
   const [sales, setSales] = useState<Array<{ name: string; price: number; category: string }>>([]);
   const [open, setOpen] = useState(false);
