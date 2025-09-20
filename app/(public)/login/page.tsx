@@ -36,7 +36,7 @@ export default function LoginPage() {
           className="w-32 h-32 object-contain mb-2 drop-shadow-lg"
         />
         <h1 className="text-3xl font-extrabold text-white tracking-wide mb-2 font-sans drop-shadow">Ek-Pa</h1>
-        <p className="text-base text-white/80 mb-4 text-center">Ek-Pa Gıda Satış Takip Platformu</p>
+        <p className="text-base text-white/90 font-medium mb-4 text-center">Ek-Pa Gıda Satış Takip Platformu</p>
         {error && <p className="text-red-200 text-sm text-center bg-red-900/30 border border-red-200 rounded px-3 py-2 w-full">{error}</p>}
         <button
           type="button"
