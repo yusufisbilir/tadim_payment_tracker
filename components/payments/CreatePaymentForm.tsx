@@ -1,9 +1,7 @@
 "use client";
-import React, { useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Routes from "@/constants/Routes";
-import { redirect } from "next/navigation";
 import { CreditCardIcon, MoneyIcon } from "@phosphor-icons/react";
 import { createPaymentAction } from "@/app/(private)/payments/actions";
 
@@ -27,7 +25,6 @@ const CreatePaymentForm = () => {
         setSuccess("Ödeme başarıyla eklendi!");
         setCustomer("");
         setPrice("");
-        redirect(Routes.PAYMENTS);
       } else {
         setError(result.error || "Bir hata oluştu");
       }
