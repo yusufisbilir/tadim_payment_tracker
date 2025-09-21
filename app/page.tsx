@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import AuthGuard from "../components/AuthGuard";
 
-const Dashboard = dynamic(() => import("./(private)/dashboard"), {
+const Dashboard = dynamic(() => import("./(private)/payments/page"), {
   ssr: false,
 });
 
