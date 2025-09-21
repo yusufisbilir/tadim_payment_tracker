@@ -27,7 +27,11 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        Loading...
+        <img
+          src="/tadim-logo.webp"
+          alt="Tadım Logo"
+          className="w-32 h-32 object-contain drop-shadow-lg animate-pulse"
+        />
       </div>
     );
   }
