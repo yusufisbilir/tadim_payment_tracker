@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Table } from "@/components/ui/table";
 import UserMenu from "@/components/UserMenu";

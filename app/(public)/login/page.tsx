@@ -1,11 +1,26 @@
 "use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
-import { useState } from "react";
+import Routes from "@/constants/Routes";
 
 export default function LoginPage() {
-  const supabase = createClient()
+  const supabase = createClient();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        router.replace(Routes.PAYMENTS);
+      }
+    };
+    checkUser();
+  }, [router, supabase]);
 
   const handleGoogleLogin = async () => {
     setLoading(true);
@@ -28,7 +43,7 @@ export default function LoginPage() {
           backdropFilter: "blur(16px)",
           WebkitBackdropFilter: "blur(16px)",
           boxShadow: "0 8px 32px 0 rgba(0,0,0,0.25)",
-          border: "1px solid rgba(255,255,255,0.18)"
+          border: "1px solid rgba(255,255,255,0.18)",
         }}
       >
         <img
@@ -36,9 +51,17 @@ export default function LoginPage() {
           alt="Tadım Logo"
           className="w-32 h-32 object-contain mb-2 drop-shadow-lg"
         />
-        <h1 className="text-3xl font-extrabold text-white tracking-wide mb-2 font-sans drop-shadow">Ek-Pa</h1>
-        <p className="text-base text-white/90 font-medium mb-4 text-center">Ek-Pa Gıda Satış Takip Platformu</p>
-        {error && <p className="text-red-200 text-sm text-center bg-red-900/30 border border-red-200 rounded px-3 py-2 w-full">{error}</p>}
+        <h1 className="text-3xl font-extrabold text-white tracking-wide mb-2 font-sans drop-shadow">
+          Ek-Pa
+        </h1>
+        <p className="text-base text-white/90 font-medium mb-4 text-center">
+          Ek-Pa Gıda Satış Takip Platformu
+        </p>
+        {error && (
+          <p className="text-red-200 text-sm text-center bg-red-900/30 border border-red-200 rounded px-3 py-2 w-full">
+            {error}
+          </p>
+        )}
         <button
           type="button"
           onClick={handleGoogleLogin}
@@ -47,7 +70,9 @@ export default function LoginPage() {
         >
           {loading ? "Yönlendiriliyor..." : "Google ile Giriş"}
         </button>
-        <div className="mt-6 text-xs text-white/60 text-center">© {new Date().getFullYear()} Ek-Pa. All rights reserved.</div>
+        <div className="mt-6 text-xs text-white/60 text-center">
+          © {new Date().getFullYear()} Ek-Pa. All rights reserved.
+        </div>
       </div>
     </main>
   );
