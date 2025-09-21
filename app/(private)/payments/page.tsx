@@ -6,17 +6,21 @@ export default function Payments() {
   const [payments, setPayments] = useState<
     Array<{ customer: string; price: number; payment_method: "card" | "cash" }>
   >([]);
+  const [date, setDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split("T")[0];
+  });
 
   useEffect(() => {
     async function fetchPayments() {
-      const res = await fetch("/api/payments");
+      const res = await fetch(`/api/payments?date=${date}`);
       if (res.ok) {
         const data = await res.json();
         setPayments(data);
       }
     }
     fetchPayments();
-  }, []);
+  }, [date]);
 
   // Calculate statistics
   const totalCard = payments
@@ -28,14 +32,29 @@ export default function Payments() {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2 gap-6 mb-4">
-        <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
-          <span className="font-semibold text-gray-700">Kart:</span>
-          <span className="ml-2 text-blue-600 font-bold">₺{totalCard}</span>
+      <div className="flex flex-col md:flex-row gap-6 mb-4 items-center">
+        <div className="flex items-center gap-2 mb-2 md:mb-0">
+          <label htmlFor="date" className="font-semibold text-gray-700">
+            Tarih:
+          </label>
+          <input
+            id="date"
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className="border rounded px-2 py-1 text-sm"
+            max={new Date().toISOString().split("T")[0]}
+          />
         </div>
-        <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
-          <span className="font-semibold text-gray-700">Nakit:</span>
-          <span className="ml-2 text-green-600 font-bold">₺{totalCash}</span>
+        <div className="flex gap-6">
+          <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
+            <span className="font-semibold text-gray-700">Kart:</span>
+            <span className="ml-2 text-blue-600 font-bold">₺{totalCard}</span>
+          </div>
+          <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
+            <span className="font-semibold text-gray-700">Nakit:</span>
+            <span className="ml-2 text-green-600 font-bold">₺{totalCash}</span>
+          </div>
         </div>
       </div>
       <Table className="border border-gray-200">
