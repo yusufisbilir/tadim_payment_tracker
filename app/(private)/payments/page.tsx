@@ -1,4 +1,5 @@
 "use client";
+import CreatePaymentForm from "@/components/payments/CreatePaymentForm";
 import { Table } from "@/components/ui/table";
 import { useEffect, useState } from "react";
 
@@ -31,7 +32,8 @@ export default function Payments() {
     .reduce((sum, p) => sum + p.price, 0);
 
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-6">
+      <CreatePaymentForm />
       <div className="flex flex-col md:flex-row gap-6 mb-4 items-center">
         <div className="flex items-center gap-2 mb-2 md:mb-0">
           <label htmlFor="date" className="font-semibold text-gray-700">
@@ -45,16 +47,6 @@ export default function Payments() {
             className="border rounded px-2 py-1 text-sm"
             max={new Date().toISOString().split("T")[0]}
           />
-        </div>
-        <div className="flex gap-6">
-          <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
-            <span className="font-semibold text-gray-700">Kart:</span>
-            <span className="ml-2 text-blue-600 font-bold">₺{totalCard}</span>
-          </div>
-          <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
-            <span className="font-semibold text-gray-700">Nakit:</span>
-            <span className="ml-2 text-green-600 font-bold">₺{totalCash}</span>
-          </div>
         </div>
       </div>
       <Table className="border border-gray-200">
@@ -94,6 +86,16 @@ export default function Payments() {
           )}
         </tbody>
       </Table>
+      <div className="flex gap-6">
+        <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
+          <span className="font-semibold text-gray-700">Kart:</span>
+          <span className="ml-2 text-blue-600 font-bold">₺{totalCard}</span>
+        </div>
+        <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
+          <span className="font-semibold text-gray-700">Nakit:</span>
+          <span className="ml-2 text-green-600 font-bold">₺{totalCash}</span>
+        </div>
+      </div>
     </div>
   );
 }

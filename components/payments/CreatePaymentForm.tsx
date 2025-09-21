@@ -2,9 +2,12 @@
 import React, { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { createPaymentAction } from "./actions";
+import Routes from "@/constants/Routes";
+import { redirect } from "next/navigation";
+import { CreditCardIcon, MoneyIcon } from "@phosphor-icons/react";
+import { createPaymentAction } from "@/app/(private)/payments/actions";
 
-const Page = () => {
+const CreatePaymentForm = () => {
   const [customer, setCustomer] = useState("");
   const [price, setPrice] = useState("");
   const [loading, startTransition] = useTransition();
@@ -24,6 +27,7 @@ const Page = () => {
         setSuccess("Ödeme başarıyla eklendi!");
         setCustomer("");
         setPrice("");
+        redirect(Routes.PAYMENTS);
       } else {
         setError(result.error || "Bir hata oluştu");
       }
@@ -31,7 +35,7 @@ const Page = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow">
+    <div className="w-full p-6 bg-white border border-gray-200 rounded-lg shadow">
       <h2 className="text-xl font-bold mb-6">Ödeme Ekle</h2>
       <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
         <div>
@@ -62,22 +66,24 @@ const Page = () => {
             step="0.01"
           />
         </div>
-        <div className="flex gap-4 pt-2">
+        <div className="gap-4 grid grid-cols-2">
           <Button
             type="button"
-            variant="default"
             disabled={loading}
             onClick={() => handleSubmit("card")}
+            className="bg-blue-500 hover:bg-blue-600 h-12"
           >
-            Kart ile Ekle
+            <CreditCardIcon />
+            Kart
           </Button>
           <Button
             type="button"
-            variant="outline"
             disabled={loading}
             onClick={() => handleSubmit("cash")}
+            className="bg-green-600 hover:bg-green-700 h-12"
           >
-            Nakit ile Ekle
+            <MoneyIcon />
+            Nakit
           </Button>
         </div>
         {error && <div className="text-red-500 text-sm pt-2">{error}</div>}
@@ -89,4 +95,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default CreatePaymentForm;
