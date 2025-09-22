@@ -31,6 +31,14 @@ export default function Payments() {
     .filter((p) => p.payment_method === "cash")
     .reduce((sum, p) => sum + p.price, 0);
 
+  const formatTL = (amount: number) =>
+    new Intl.NumberFormat("tr-TR", {
+      style: "currency",
+      currency: "TRY",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
+
   return (
     <div className="w-full flex flex-col gap-6">
       <CreatePaymentForm />
@@ -80,7 +88,7 @@ export default function Payments() {
                 <td className="p-2 border-r border-gray-200">
                   {payment.payment_method === "card" ? "Kart" : "Nakit"}
                 </td>
-                <td className="p-2">{`₺${payment.price}`}</td>
+                <td className="p-2">{formatTL(payment.price)}</td>
               </tr>
             ))
           )}
@@ -89,11 +97,15 @@ export default function Payments() {
       <div className="flex gap-6">
         <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
           <span className="font-semibold text-gray-700">Kart:</span>
-          <span className="ml-2 text-blue-600 font-bold">₺{totalCard}</span>
+          <span className="ml-2 text-blue-600 font-bold">
+            {formatTL(totalCard)}
+          </span>
         </div>
         <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
           <span className="font-semibold text-gray-700">Nakit:</span>
-          <span className="ml-2 text-green-600 font-bold">₺{totalCash}</span>
+          <span className="ml-2 text-green-600 font-bold">
+            {formatTL(totalCash)}
+          </span>
         </div>
       </div>
     </div>
