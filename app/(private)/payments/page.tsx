@@ -13,14 +13,15 @@ export default function Payments() {
     return today.toISOString().split("T")[0];
   });
 
-  useEffect(() => {
-    async function fetchPayments() {
-      const res = await fetch(`/api/payments?date=${date}`);
-      if (res.ok) {
-        const data = await res.json();
-        setPayments(data);
-      }
+  const fetchPayments = async () => {
+    const res = await fetch(`/api/payments?date=${date}`);
+    if (res.ok) {
+      const data = await res.json();
+      setPayments(data);
     }
+  };
+
+  useEffect(() => {
     fetchPayments();
   }, [date]);
 
@@ -42,7 +43,7 @@ export default function Payments() {
 
   return (
     <div className="w-full flex flex-col gap-6">
-      <CreatePaymentForm />
+      <CreatePaymentForm fetchPayments={fetchPayments} />
       <div className="flex flex-col md:flex-row gap-6 mb-4 items-center">
         <div className="flex items-center gap-2 mb-2 md:mb-0">
           <label htmlFor="date" className="font-semibold text-gray-700">

@@ -5,7 +5,11 @@ import { Button } from "@/components/ui/button";
 import { CreditCardIcon, MoneyIcon } from "@phosphor-icons/react";
 import { createPaymentAction } from "@/app/(private)/payments/actions";
 
-const CreatePaymentForm = () => {
+type CreatePaymentFormProps = {
+  fetchPayments: () => Promise<void>;
+};
+
+const CreatePaymentForm = ({ fetchPayments }: CreatePaymentFormProps) => {
   const [customer, setCustomer] = useState("");
   const [price, setPrice] = useState("");
   const [loading, startTransition] = useTransition();
@@ -25,6 +29,7 @@ const CreatePaymentForm = () => {
         setSuccess("Ödeme başarıyla eklendi!");
         setCustomer("");
         setPrice("");
+        fetchPayments();
       } else {
         setError(result.error || "Bir hata oluştu");
       }
