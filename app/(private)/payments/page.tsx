@@ -1,6 +1,7 @@
 "use client";
 import CreatePaymentForm from "@/components/payments/CreatePaymentForm";
 import { Table } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 export default function Payments() {
@@ -82,19 +83,28 @@ export default function Payments() {
           ) : (
             payments.map((payment, idx) => (
               <tr key={idx} className="bg-white/20 border-b border-gray-200">
-                <td className="p-2 border-r border-gray-200">
+                <td className="p-2 border-r border-gray-200 font-medium">
                   {payment.customer}
                 </td>
-                <td className="p-2 border-r border-gray-200">
+                <td
+                  className={cn(
+                    "p-2 border-r border-gray-200 text-white font-medium",
+                    payment?.payment_method === "card"
+                      ? "bg-blue-600"
+                      : "bg-green-600"
+                  )}
+                >
                   {payment.payment_method === "card" ? "Kart" : "Nakit"}
                 </td>
-                <td className="p-2">{formatTL(payment.price)}</td>
+                <td className="p-2 font-semibold text-xl">
+                  {formatTL(payment.price)}
+                </td>
               </tr>
             ))
           )}
         </tbody>
       </Table>
-      <div className="flex gap-6">
+      <div className="grid grid-cols-2 gap-4">
         <div className="bg-white rounded-lg shadow px-4 py-2 border border-gray-200">
           <span className="font-semibold text-gray-700">Kart:</span>
           <span className="ml-2 text-blue-600 font-bold">
