@@ -1,24 +1,62 @@
 "use client";
 import CreatePaymentForm from "@/components/payments/CreatePaymentForm";
 import { Table } from "@/components/ui/table";
+import DeletePaymentDialog from "@/components/payments/DeletePaymentDialog";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import { API_ROUTES } from "@/constants/api.routes.";
 
 export default function Payments() {
   const [payments, setPayments] = useState<
-    Array<{ customer: string; price: number; payment_method: "card" | "cash" }>
+    Array<{
+      id?: number;
+      customer: string;
+      price: number;
+      payment_method: "card" | "cash";
+    }>
   >([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [date, setDate] = useState(() => {
     const today = new Date();
     return today.toISOString().split("T")[0];
   });
 
   const fetchPayments = async () => {
-    const res = await fetch(`/api/payments?date=${date}`);
+    const res = await fetch(`${API_ROUTES.PAYMENTS}?date=${date}`);
     if (res.ok) {
       const data = await res.json();
       setPayments(data);
     }
+  };
+
+  const deletePayment = async (id: number) => {
+    const res = await fetch(`${API_ROUTES.PAYMENTS}?id=${id}`, {
+      method: "DELETE",
+    });
+    if (res.ok) {
+      await fetchPayments();
+    }
+  };
+
+  const handleDelete = (id: number) => {
+    setDeletingId(id);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!deletingId) return;
+    setDeleteLoading(true);
+    try {
+      await deletePayment(deletingId);
+      setDeleteDialogOpen(false);
+      setDeletingId(null);
+      await fetchPayments();
+    } catch (err) {
+      // TODO: show error
+    }
+    setDeleteLoading(false);
   };
 
   useEffect(() => {
@@ -97,8 +135,17 @@ export default function Payments() {
                 >
                   {payment.payment_method === "card" ? "Kart" : "Nakit"}
                 </td>
-                <td className="p-2 font-semibold text-xl">
+                <td className="p-2 font-semibold text-xl flex items-center gap-2 justify-between">
                   {formatTL(payment.price)}
+                  {typeof payment.id === "number" && (
+                    <button
+                      type="button"
+                      className="ml-2 text-xs px-2 py-1 rounded bg-red-500 text-white hover:bg-red-600 transition"
+                      onClick={() => handleDelete(payment.id!)}
+                    >
+                      Sil
+                    </button>
+                  )}
                 </td>
               </tr>
             ))
@@ -119,6 +166,15 @@ export default function Payments() {
           </span>
         </div>
       </div>
+      <DeletePaymentDialog
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) setDeletingId(null);
+        }}
+        onConfirm={confirmDelete}
+        loading={deleteLoading}
+      />
     </div>
   );
 }

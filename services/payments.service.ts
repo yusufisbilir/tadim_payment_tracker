@@ -29,4 +29,11 @@ export const paymentService = {
 
     return payments;
   },
+
+  async deletePayment(id: number) {
+    const supabase = await createClient();
+
+    const { error } = await supabase.from("payments").delete().eq("id", id);
+    if (error) throw error;
+  },
 };
